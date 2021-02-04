@@ -2,19 +2,10 @@ package com.example.sharephoto
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
 
-class MainActivity : AppCompatActivity() {
+class FeedActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-    }
-
-    fun register(view: View){
-
-    }
-
-    fun login(view: View){
-
+        setContentView(R.layout.activity_feed)
     }
 }
