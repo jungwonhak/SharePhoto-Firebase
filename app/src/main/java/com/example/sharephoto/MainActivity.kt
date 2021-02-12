@@ -17,6 +17,13 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         auth= FirebaseAuth.getInstance()
+
+        val currentUserLogin=auth.currentUser
+        if (currentUserLogin!=null){
+            val intent=Intent(this,FeedActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
     }
 
     fun register(view: View){
@@ -36,6 +43,18 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun login(view: View){
+        val email=emailText.text.toString()
+        val password=passwordText.text.toString()
+        auth.signInWithEmailAndPassword(email,password).addOnCompleteListener { task ->
+            if(task.isSuccessful){
+                val currentUserLogin=auth.currentUser?.email.toString()
+                val intent=Intent(this,FeedActivity::class.java)
+                startActivity(intent)
+                finish()
+            }
+        }.addOnFailureListener { exception ->
+            Toast.makeText(applicationContext,exception.localizedMessage,Toast.LENGTH_LONG).show()
+        }
 
     }
 }
