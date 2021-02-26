@@ -10,7 +10,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var  auth:FirebaseAuth
+    private lateinit var auth: FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,14 +32,13 @@ class MainActivity : AppCompatActivity() {
 
         auth.createUserWithEmailAndPassword(email,password).addOnCompleteListener { task ->
             if(task.isSuccessful){
-                val intent=Intent(this,FeedActivity::class.java)
+                val intent= Intent(this,FeedActivity::class.java)
                 startActivity(intent)
                 finish()
             }
         }.addOnFailureListener { exception ->
             Toast.makeText(applicationContext,exception.localizedMessage,Toast.LENGTH_LONG).show()
         }
-
     }
 
     fun login(view: View){
@@ -55,6 +54,5 @@ class MainActivity : AppCompatActivity() {
         }.addOnFailureListener { exception ->
             Toast.makeText(applicationContext,exception.localizedMessage,Toast.LENGTH_LONG).show()
         }
-
     }
 }

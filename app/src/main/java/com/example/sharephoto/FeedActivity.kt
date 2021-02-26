@@ -24,7 +24,7 @@ class FeedActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if(item.itemId==R.id.share_photo){
-            val intent=Intent(this, SharePhotoActivity::class.java)
+            val intent= Intent(this, SharePhotoActivity::class.java)
             startActivity(intent)
         }else if(item.itemId==R.id.log_out){
             auth.signOut()
