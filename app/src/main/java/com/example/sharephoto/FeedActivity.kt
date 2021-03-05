@@ -8,10 +8,13 @@ import android.view.MenuItem
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 
 class FeedActivity : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
     private lateinit var database:FirebaseFirestore
+
+    var postList=ArrayList<Post>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,16 +26,23 @@ class FeedActivity : AppCompatActivity() {
     }
 
     fun getData(){
-        database.collection("Post").addSnapshotListener { value, error ->
+        database.collection("Post").orderBy("date",Query.Direction.DESCENDING).addSnapshotListener { value, error ->
             if(error!=null){
                 Toast.makeText(this,error.localizedMessage,Toast.LENGTH_LONG).show()
             }else{
                 if(value!=null){
                     if(!value.isEmpty){
                         val documents=value.documents
+
+                        postList.clear()
+                        
                         for(document in documents){
-                            val userEmail=document.get("useremail")
-                            println(userEmail)
+                            val userEmail=document.get("useremail") as String
+                            val userComment=document.get("usercomment") as String
+                            val imageUrl=document.get("imageurl") as String
+
+                            val downloadedPost=Post(userEmail,userComment,imageUrl)
+                            postList.add(downloadedPost)
                         }
                     }
 
