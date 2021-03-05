@@ -6,16 +6,20 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.sharephoto.Post
 import com.example.sharephoto.R
 import com.example.sharephoto.SharePhotoActivity
+import com.example.sharephoto.adapter.RecyclerAdapter
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
+import kotlinx.android.synthetic.main.activity_feed.*
 
 class FeedActivity : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
     private lateinit var database:FirebaseFirestore
+    private lateinit var recyclerViewAdapter:RecyclerAdapter
 
     var postList=ArrayList<Post>()
 
@@ -26,6 +30,11 @@ class FeedActivity : AppCompatActivity() {
         auth=FirebaseAuth.getInstance()
         database= FirebaseFirestore.getInstance()
         getData()
+
+        var layoutManager=LinearLayoutManager(this)
+        recyclerView.layoutManager=layoutManager
+        recyclerViewAdapter= RecyclerAdapter(postList)
+        recyclerView.adapter=recyclerViewAdapter
     }
 
     fun getData(){
@@ -47,6 +56,7 @@ class FeedActivity : AppCompatActivity() {
                             val downloadedPost= Post(userEmail, userComment, imageUrl)
                             postList.add(downloadedPost)
                         }
+                        recyclerViewAdapter.notifyDataSetChanged()
                     }
 
                 }
