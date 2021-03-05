@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.sharephoto.Post
 import com.example.sharephoto.R
+import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_feed.view.*
 import kotlinx.android.synthetic.main.recycler_row.view.*
 
@@ -27,5 +28,6 @@ class RecyclerAdapter(val postList: ArrayList<Post>):RecyclerView.Adapter<Recycl
     override fun onBindViewHolder(holder: PostHolder, position: Int) {
         holder.itemView.recyclerViewUserEmail.text=postList[position].userEmail
         holder.itemView.recyclerViewUserComment.text=postList[position].userComment
+        Picasso.get().load(postList[position].imageUrl).into(holder.itemView.recyclerImageView)
     }
 }
