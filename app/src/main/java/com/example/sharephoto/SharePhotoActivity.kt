@@ -15,14 +15,26 @@ import android.view.View
 import androidx.appcompat.app.AppCompatViewInflater
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.activity_share_photo.*
+import java.util.*
 
 class SharePhotoActivity : AppCompatActivity() {
     var chosenImage:Uri?=null
     var chosenBitmap:Bitmap?=null
+    private  lateinit var storage:FirebaseStorage
+    private lateinit var auth: FirebaseAuth
+    private lateinit var database:FirebaseFirestore
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_share_photo)
+
+        storage= FirebaseStorage.getInstance()
+        auth= FirebaseAuth.getInstance()
+        database= FirebaseFirestore.getInstance()
     }
 
     fun choose(view:View){
@@ -59,5 +71,20 @@ class SharePhotoActivity : AppCompatActivity() {
             }
         }
         super.onActivityResult(requestCode, resultCode, data)
+    }
+
+    fun share(view: View){
+        val uuid=UUID.randomUUID()
+        val imageName="${uuid}.jpg"
+
+        val reference=storage.reference
+        val imageReference=reference.child("images").child(imageName)
+
+        if(chosenImage!=null){
+            imageReference.putFile(chosenImage!!).addOnSuccessListener {
+                println("putted")
+            }
+        }
+
     }
 }
