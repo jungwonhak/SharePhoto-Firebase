@@ -12,9 +12,11 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatViewInflater
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
@@ -81,8 +83,31 @@ class SharePhotoActivity : AppCompatActivity() {
         val imageReference=reference.child("images").child(imageName)
 
         if(chosenImage!=null){
-            imageReference.putFile(chosenImage!!).addOnSuccessListener {
-                println("putted")
+            imageReference.putFile(chosenImage!!).addOnSuccessListener {taskSnapshot ->
+                val uploadedImageReference=FirebaseStorage.getInstance().reference.child("images").child(imageName)
+                uploadedImageReference.downloadUrl.addOnSuccessListener { uri ->
+                    val downloadUrl=uri.toString()
+                    val userEmail=auth.currentUser!!.email.toString()
+                    val userComment=editTextComment.text.toString()
+                    val date=Timestamp.now()
+
+                    //database operations
+                    val postHashMap= hashMapOf<String,Any>()
+                    postHashMap.put("imageurl",downloadUrl)
+                    postHashMap.put("useremail",userEmail)
+                    postHashMap.put("usercomment",userComment)
+                    postHashMap.put("date",date)
+
+                    database.collection("Post").add(postHashMap).addOnCompleteListener { task ->
+                        if(task.isSuccessful){
+                            finish()
+                        }
+                    }.addOnFailureListener { exception ->
+                        Toast.makeText(applicationContext,exception.localizedMessage,Toast.LENGTH_LONG).show()
+                    }
+                }
+            }.addOnFailureListener { exception ->
+                Toast.makeText(applicationContext,exception.localizedMessage,Toast.LENGTH_LONG).show()
             }
         }
 
