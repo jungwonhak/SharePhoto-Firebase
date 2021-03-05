@@ -10,8 +10,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.SharePhoto">
         <activity android:name=".SharePhotoActivity"></activity>
-        <activity android:name=".FeedActivity" />
-        <activity android:name=".MainActivity">
+        <activity android:name=".view.FeedActivity" />
+        <activity android:name=".view.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
